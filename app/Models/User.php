@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class User extends Authenticatable
 {
@@ -34,10 +33,5 @@ class User extends Authenticatable
     public function gender()
     {
         return $this->belongsTo(Gender::class, 'gender_id');
-    }
-
-     public function tokens()
-    {
-        return $this->morphMany(PersonalAccessToken::class, 'tokenable');
     }
 }

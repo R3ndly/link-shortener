@@ -1,54 +1,17 @@
+<!Doctype html>
 <div class="card-header">Профиль</div>
 
 <div class="card-body" id="profile-data"></div>
-<button id="logout-btn" class="btn btn-danger">Выход из аккаунта</button>
+<button id="logout-btn">Выход из аккаунта</button><br>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('auth_token');
+<h2>Создание короткой ссылки</h2>
+<input type="text" id="originalUrl" placeholder="Введите полный URL">
+<button id="createLink">Сгенерировать</button>
+<div id="result" style="display: none;">
+    <p>Ваша короткая ссылка:</p>
+    <a href="#" id="shortLink"></a>
+</div>
 
-    if (!token) {
-        window.location.href = '/login';
-        return;
-    }
 
-    fetch('/api/profile', {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Ошибка загрузки профиля');
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById('profile-data').innerHTML = `
-            <p><strong>Email:</strong> ${data.email}</p>
-            <p><strong>Пол:</strong> ${data.gender_name}</p>
-        `;
-    })
-    .catch(error => {
-        console.error(error);
-        window.location.href = '/login';
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', function() {
-        fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            localStorage.removeItem('auth_token');
-            window.location.href = '/login';
-        })
-        .catch(error => {
-            console.error('Ошибка выхода:', error);
-        });
-    });
-});
-</script>
+<script src="/custom/profile.js"></script>
+<script src="/custom/generateUrl.js"></script>
