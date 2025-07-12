@@ -35,12 +35,20 @@ class LinkController extends Controller
         ]);
     }
 
-    public function destination_url(Request $request)//: RedirectResponse
+    public function destination_url(Request $request): RedirectResponse
     {
         $shortURL = $request->path();
         $destinationURL = DB::table('links')->where('short_url', $shortURL)->value('original_url');
-        echo $destinationURL;
-        //echo $shortURL;
         return redirect()->to($destinationURL);
+    }
+
+    public function getLinks(): JsonResponse
+    {
+        $user = auth()->user();
+        $links = $user->links()->get();
+
+        return response()->json([
+            'data' => $links
+        ]);
     }
 }

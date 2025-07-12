@@ -7,15 +7,9 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLoginForm(): View
-    {
-        return view('auth.login');
-    }
-
     public function login(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -42,11 +36,6 @@ class AuthController extends Controller
     public function logout(Request $request): void
     {
         $request->user()->tokens()->delete();
-    }
-
-    public function showRegisterForm(): View
-    {
-         return view('auth.register');
     }
 
     public function register(Request $request): JsonResponse

@@ -10,6 +10,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/profile', [ProfileController::class, 'getProfileData']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/generate-short-link', [LinkController::class, 'generateShortLink']);
+
+    Route::controller(LinkController::class)->group(function () {
+        Route::get('/links', 'getLinks');
+    });
 });
 
 Route::post('/register', [AuthController::class, 'register']);

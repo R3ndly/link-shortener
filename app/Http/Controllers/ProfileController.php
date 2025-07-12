@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-class ProfileController extends Controller
+use Illuminate\Http\JsonResponse;
+
+class ProfileController
 {
-    public function show()
+    protected $userData;
+
+    public function __construct()
     {
-        return view('profile');
+        $this->userData = auth()->user();
     }
 
-    public function getProfileData()
+    public function getProfileData(): JsonResponse
     {
-        $user = auth()->user();
-
         return response()->json([
-            'email' => $user->email,
-            'gender_name' => $user->gender->gender_name ?? null
+            'email' => $this->userData->email,
+            'gender_name' => $this->userData->gender->gender_name
         ]);
     }
 }

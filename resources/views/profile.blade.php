@@ -10,7 +10,9 @@
 <div id="result" style="display: none;">
     <p>Ваша короткая ссылка:</p>
     <a href="#" id="shortLink"></a>
-</div>
+</div><br>
+
+<a href="/links">Управление ссылками</a>
 
 
 <script src="/custom/profile.js"></script>

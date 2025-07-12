@@ -34,4 +34,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Gender::class, 'gender_id');
     }
+
+    public function links()
+    {
+        return $this->hasMany(Link::class, 'user_id');
+    }
 }
