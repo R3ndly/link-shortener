@@ -6,13 +6,14 @@ use App\Http\Controllers\GenderController;
 use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:api')->group(function() {
     Route::get('/profile', [ProfileController::class, 'getProfileData']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/generate-short-link', [LinkController::class, 'generateShortLink']);
 
     Route::controller(LinkController::class)->group(function () {
         Route::get('/links', 'getLinks');
+        Route::delete('/links/{id}', 'delete');
     });
 });
 

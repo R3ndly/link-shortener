@@ -42,13 +42,39 @@ class LinkController extends Controller
         return redirect()->to($destinationURL);
     }
 
-    public function getLinks(): JsonResponse
-    {
+public function getLinks(): JsonResponse
+{
+    try {
         $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $links = $user->links()->get();
 
         return response()->json([
-            'data' => $links
+            'links' => $links
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Server error'], 500);
+    }
+}
+
+    public function delete(int $id): JsonResponse
+    {
+        $link = Link::find($id);
+
+        if (!$link) {
+            return response()->json([
+                'message' => 'Запись в таблице Links не найдена',
+            ], 404);
+        }
+
+        $link->delete();
+
+        return response()->json([
+            'message' => 'Запись в таблице Link успешно удалена',
         ]);
     }
 }
