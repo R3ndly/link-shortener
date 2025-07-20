@@ -19,7 +19,9 @@
                 <th class="createdAt"></th>
                 <th class="updatedAt"></th>
                 <th>
-                    <span>Кнопки</span>
+                    <form class="js-delete-form">
+                        <button type="submit">Удалить</button>
+                    </form>
                 </th>
             </tr>
         </template>
