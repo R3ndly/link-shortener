@@ -37,9 +37,28 @@ class LinkController extends Controller
 
     public function destination_url(Request $request): RedirectResponse
     {
-        $shortURL = $request->path();
-        $destinationURL = DB::table('links')->where('short_url', $shortURL)->value('original_url');
-        return redirect()->to($destinationURL);
+        $link = DB::table('links')->where('short_url', $request->path())->first();
+
+        $ipAddress = $request->ip();
+
+        $existingVisit = DB::table('link_visits')->where('link_id', $link->link_id)->where('ip_address', $ipAddress)->first();
+
+        if ($existingVisit) {
+            DB::table('link_visits')->where('visit_id', $existingVisit->visit_id)
+                ->update([
+                    'count_transition' => $existingVisit->count_transition + 1,
+                    'redirect_time' => now(),
+                ]);
+        } else {
+            DB::table('link_visits')->insert([
+                'link_id' => $link->link_id,
+                'ip_address' => $ipAddress,
+                'count_transition' => 1,
+                'redirect_time' => now(),
+            ]);
+        }
+
+        return redirect()->to($link->original_url);
     }
 
     public function getLinks(): JsonResponse
