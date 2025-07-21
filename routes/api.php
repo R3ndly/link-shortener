@@ -13,7 +13,10 @@ Route::middleware('auth:api')->group(function() {
 
     Route::controller(LinkController::class)->group(function () {
         Route::get('/links', 'getLinks');
+        Route::get('/links/{id}', 'show');
+        Route::put('/links/{id}', 'update');
         Route::delete('/links/{id}', 'delete');
+
     });
 });
 

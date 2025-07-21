@@ -19,6 +19,7 @@ Route::get('/about', function () {
         Route::get('/register', 'RegisterForm');
         Route::get('/profile', 'Profile');
         Route::get('/links', 'userLinks');
+        Route::get('/links/edit/{id}', 'editLinks');
     });
 
 

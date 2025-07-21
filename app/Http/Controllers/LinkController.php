@@ -42,24 +42,33 @@ class LinkController extends Controller
         return redirect()->to($destinationURL);
     }
 
-public function getLinks(): JsonResponse
-{
-    try {
-        $user = auth()->user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+    public function getLinks(): JsonResponse
+    {
+        try {
+            $user = auth()->user();
+            if (!$user) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
 
-        $links = $user->links()->get();
+            $links = $user->links()->get();
+
+            return response()->json([
+                'links' => $links
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error'], 500);
+        }
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        $link = Link::find($id);
 
         return response()->json([
-            'links' => $links
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Server error'], 500);
+            'link' => $link
+        ], 200);
     }
-}
 
     public function delete(int $id): JsonResponse
     {
@@ -75,6 +84,30 @@ public function getLinks(): JsonResponse
 
         return response()->json([
             'message' => 'Запись в таблице Link успешно удалена',
+        ]);
+    }
+
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'original_url' => ['required', 'string', 'max:255'],
+            'short_url' => ['required', 'string', 'max:255']
+        ]);
+
+        $link = Link::find($id);
+
+        if(!$link) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Запись не найдена.'
+            ], 404);
+        }
+
+        $link->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Успешно обновленно'
         ]);
     }
 }

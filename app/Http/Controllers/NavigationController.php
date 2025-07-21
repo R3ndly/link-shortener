@@ -25,4 +25,9 @@ class NavigationController
     {
         return view('links.index');
     }
+
+    public function editLinks(): View
+    {
+        return view('links.edit');
+    }
 }
